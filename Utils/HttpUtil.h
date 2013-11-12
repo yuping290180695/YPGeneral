@@ -9,19 +9,15 @@
 #import <Foundation/Foundation.h>
 #import "MKNetworkEngine.h"
 #import "YPBaseViewController.h"
-typedef enum {
-    HttpMethodPost,
-    HttpMethodGet,
-    HttpMethodPut,
-    HttpMethodDelete,
-}HttpMethod;
+#import "ApiRequest.h"
+//typedef enum {
+//    HttpMethodPost,
+//    HttpMethodGet,
+//    HttpMethodPut,
+//    HttpMethodDelete,
+//}HttpMethod;
 
-#define API_METHOD_POST     @"POST"
-#define API_METHOD_GET      @"GET"
-#define API_METHOD_PUT      @"PUT"
-#define API_METHOD_DELETE   @"DELETE"
-typedef void (^ApiRequestSuccessedBlock)(NSDictionary *successedData);
-typedef BOOL (^ApiRequestFailedBlock)(NSDictionary *failedData);
+
 
 @interface HttpUtil : NSObject
 
@@ -31,20 +27,20 @@ typedef BOOL (^ApiRequestFailedBlock)(NSDictionary *failedData);
 // icarsclub的http请求，需要signed request
 - (void)startPPRequest:(NSString *)path
                       params:(NSMutableDictionary *)params
-                  httpMethod:(HttpMethod)method
+                  httpMethod:(NSString *)method
                   controller:(YPBaseViewController *)controller
                    successed:(void (^)(NSDictionary *data))sBlock
                       failed:(BOOL (^)(NSDictionary *responseDict))fBlock;
 
 - (void)startPPRequest:(NSString *)path
                       params:(NSMutableDictionary *)params
-                  httpMethod:(HttpMethod)method
+                  httpMethod:(NSString *)method
                   controller:(YPBaseViewController *)controller
                    successed:(void (^)(NSDictionary *data))sBlock;
 
 - (void)startPPRequest:(NSString *)path
                       params:(NSMutableDictionary *)params
-                  httpMethod:(HttpMethod)method
+                  httpMethod:(NSString *)method
                    completed:(MKNKResponseBlock)response
                        error:(MKNKResponseErrorBlock)error;
 
@@ -59,14 +55,14 @@ typedef BOOL (^ApiRequestFailedBlock)(NSDictionary *failedData);
 // http请求，通用
 - (void)startWithURLString:(NSString *)urlString
                     params:(NSMutableDictionary *)params
-                httpMethod:(HttpMethod)method
+                httpMethod:(NSString *)method
                 controller:(YPBaseViewController *)controller
                  successed:(void (^)(NSDictionary *data))sBlock
                     failed:(BOOL (^)(NSDictionary *responseDict))fBlock;
 
 - (void)startWithURLString:(NSString *)urlString
                     params:(NSMutableDictionary *)params
-                httpMethod:(HttpMethod)method
+                httpMethod:(NSString *)method
                  completed:(MKNKResponseBlock)response
                      error:(MKNKResponseErrorBlock)error;
 + (NSString *)requestUrlWithPath:(NSString *)path;
@@ -79,38 +75,12 @@ typedef BOOL (^ApiRequestFailedBlock)(NSDictionary *failedData);
          failed:(BOOL (^)(NSDictionary *responseDict))fBlock;
 
 
-
-+ (void)startWithURLStr:(NSString *)urlString
-                 params:(NSMutableDictionary *)params
-                 method:(NSString *)method
-             controller:(YPBaseViewController *)controller
-              successed:(ApiRequestSuccessedBlock)successed
-                 failed:(ApiRequestFailedBlock)failed;
-@end
-
-
-
-// 优化http请求的逻辑
-@interface ApiRequest : NSObject
-@property (nonatomic, strong) NSString *urlString;
-@property (nonatomic, strong) NSString *method;
-@property (nonatomic, strong) NSMutableDictionary *params;
-@property (nonatomic, strong) NSMutableDictionary *uploadFiles;
-@property (nonatomic, strong) YPBaseViewController *controller;
-- (id)initWithPath:(NSString *)path
-            params:(NSMutableDictionary *)params
-        httpMethod:(NSString *)method
-        controller:(YPBaseViewController *)controller;
-
-- (id)initWithUrlString:(NSString *)urlString
-                 params:(NSMutableDictionary *)params
-             httpMethod:(NSString *)method
-             controller:(YPBaseViewController *)controller;
-- (void)start;
-- (void)startUpload;
-- (void)setSuccessedHandler:(ApiRequestSuccessedBlock)successed
-              failedHandler:(ApiRequestFailedBlock)failed;
-- (void)onUploadProgressChanged:(MKNKProgressBlock)uploadProgressBlock;
-
+//
+//+ (void)startWithURLStr:(NSString *)urlString
+//                 params:(NSMutableDictionary *)params
+//                 method:(NSString *)method
+//             controller:(YPBaseViewController *)controller
+//              successed:(ApiRequestSuccessedBlock)successed
+//                 failed:(ApiRequestFailedBlock)failed;
 @end
 

@@ -225,4 +225,33 @@
     [self.view addSubview:button];
     [self.view sendSubviewToBack:button];
 }
+
+- (void)initLeftBarButtonItem:(NSString *)title style:(UIBarButtonItemStyle)style target:(id)target action:(SEL)action
+{
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:title style:style target:target action:action];
+}
+- (void)initRightBarButtonItem:(NSString *)title style:(UIBarButtonItemStyle)style target:(id)target action:(SEL)action
+{
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:title style:style target:target action:action];
+}
+
+- (void)initLeftBarButtonItem:(NSString *)title
+{
+    [self initLeftBarButtonItem:title style:UIBarButtonItemStyleBordered target:self action:@selector(leftBarButtonPressed:)];
+}
+
+- (void)initRightBarButtonItem:(NSString *)title
+{
+    [self initRightBarButtonItem:title style:UIBarButtonItemStyleBordered target:self action:@selector(rightBarButtonPressed:)];
+}
+
+- (IBAction)rightBarButtonPressed:(id)sender
+{
+    
+}
+
+- (IBAction)leftBarButtonPressed:(id)sender
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
 @end
