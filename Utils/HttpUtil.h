@@ -9,13 +9,10 @@
 #import <Foundation/Foundation.h>
 #import "MKNetworkEngine.h"
 #import "YPBaseViewController.h"
-#import "ApiRequest.h"
-//typedef enum {
-//    HttpMethodPost,
-//    HttpMethodGet,
-//    HttpMethodPut,
-//    HttpMethodDelete,
-//}HttpMethod;
+#define HttpMethodPost     @"POST"
+#define HttpMethodGet      @"GET"
+#define HttpMethodPut      @"PUT"
+#define HttpMethodDelete   @"DELETE"
 
 
 

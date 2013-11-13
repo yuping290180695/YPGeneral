@@ -71,10 +71,11 @@
 - (void)tableViewPullToFootLoadDataFinished
 {
     NSLog(@"finished");
-    [UIView animateWithDuration:0.25
-                     animations:^{
-                         self.tableView.tableFooterView = nil;
-                     }];
+    self.tableView.tableFooterView = nil;
+//    [UIView animateWithDuration:0.25
+//                     animations:^{
+//                         self.tableView.tableFooterView = nil;
+//                     }];
     
 }
 
