@@ -23,7 +23,9 @@ typedef BOOL (^ApiRequestFailedBlock)(NSDictionary *failedData);
 @property (nonatomic, strong) NSMutableDictionary *params;
 @property (nonatomic, strong) NSMutableDictionary *uploadFiles;
 @property (nonatomic, strong) YPBaseViewController *controller;
-+ (NSString *)requestUrlWithPath:(NSString *)path;
+@property (nonatomic, strong) ApiRequestSuccessedBlock successed;
+@property (nonatomic, strong) ApiRequestFailedBlock failed;
+
 
 - (id)initWithPath:(NSString *)path
             params:(NSMutableDictionary *)params
@@ -40,5 +42,26 @@ typedef BOOL (^ApiRequestFailedBlock)(NSDictionary *failedData);
               failedHandler:(ApiRequestFailedBlock)failed;
 - (void)onUploadProgressChanged:(MKNKProgressBlock)uploadProgressBlock;
 
+// 关闭进度框并且显示错误信息
+- (void)hideProgressAndShowErrorMsg:(NSString *)message;
+/*
+ 子类可重写
+ */
+// 组装请求的URL
++ (NSString *)requestUrlWithPath:(NSString *)path;
 
+// 获取错误信息
+- (NSString *)getErrorMessage:(NSDictionary *)responseData;
+
+// 请求成功如何操作
+- (void)operationSuccessed:(NSDictionary *)responseData;
+
+// 请求失败如何操作
+- (void)operationFailed:(NSDictionary *)responseData;
+@end
+
+@interface HttpEngine : NSObject
+
+@property (nonatomic, strong) MKNetworkEngine *mkNetworkEngine;
++ (HttpEngine *)sharedInstance;
 @end

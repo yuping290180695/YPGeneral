@@ -9,10 +9,9 @@
 #import "ApiRequest.h"
 #import "JSONKit.h"
 #import "Constants.h"
-#import "HttpUtil.h"
+
 @interface ApiRequest ()
-@property (nonatomic, strong) ApiRequestSuccessedBlock successed;
-@property (nonatomic, strong) ApiRequestFailedBlock failed;
+
 @property (nonatomic, strong) MKNKProgressBlock uploadProgressBlock;
 @end
 
@@ -50,12 +49,12 @@
     NSLog(@"method-->%@", _method);
     NSLog(@"params-->%@", [self.params description]);
     
-    MKNetworkEngine *engine = [HttpUtil shared].engine;
+    MKNetworkEngine *engine = [HttpEngine sharedInstance].mkNetworkEngine;
     MKNetworkOperation *op = [engine operationWithURLString:self.urlString params:self.params httpMethod:_method];
     [op addCompletionHandler:^(MKNetworkOperation *completedOperation) {
-        [self process:completedOperation];
+        [self processRequestOperation:completedOperation];
     } errorHandler:^(MKNetworkOperation *completedOperation, NSError *error) {
-        [self process:completedOperation];
+        [self processRequestOperation:completedOperation];
     }];
     [engine enqueueOperation:op forceReload:YES];
 }
@@ -68,7 +67,7 @@
     NSLog(@"url-->%@", self.urlString);
     NSLog(@"params-->%@", [self.params description]);
     
-    MKNetworkEngine *engine = [HttpUtil shared].engine;
+    MKNetworkEngine *engine = [HttpEngine sharedInstance].mkNetworkEngine;
     MKNetworkOperation *op = [engine operationWithURLString:self.urlString
                                                      params:self.params
                                                  httpMethod:@"POST"];
@@ -88,9 +87,9 @@
     }
     
     [op addCompletionHandler:^(MKNetworkOperation *completedOperation) {
-        [self process:completedOperation];
+        [self processRequestOperation:completedOperation];
     } errorHandler:^(MKNetworkOperation *completedOperation, NSError *error) {
-        [self process:completedOperation];
+        [self processRequestOperation:completedOperation];
     }];
     [op onUploadProgressChanged:self.uploadProgressBlock];
     [engine enqueueOperation:op forceReload:YES];
@@ -105,77 +104,20 @@
     self.failed = failed;
 }
 
-- (void)process:(MKNetworkOperation *)request;
+- (void)processRequestOperation:(MKNetworkOperation *)operation;
 {
     if (_controller && [_controller isViewInBackground]) {
         return;
     }
-    int status = request.HTTPStatusCode;
+    int status = operation.HTTPStatusCode;
+    NSString *responseString = [operation responseString];
+    NSDictionary *responseData = [responseString objectFromJSONString];
     NSLog(@"request code--->%d", status);
-    NSString *result = [request responseString];
-    NSDictionary *dict = [result objectFromJSONString];
-    NSLog(@"result dict--->%@", dict.description);
-    
-    void (^failed)() = ^{
-        if (_failed && _failed(dict)) return;
-        NSString *code = dict[@"status"][@"code"];
-        
-        NSString *message = [[HttpUtil shared].errorDict objectForKey:[NSString stringWithFormat:@"error_%@", code]];
-        NSLog(@"code-->%@ message-->%@", code, message);
-        if (message == nil) {
-            message = dict[@"status"][@"message"];
-        }
-        if (message == nil) {
-            NSString *error = dict[@"error"];
-            if ([@"invalid_token" isEqualToString:error]) {
-                if (_controller) [_controller hideProgress];
-                [NativeUtil showAlertWithMessage:@"您上次的登录已失效，请重新登录"];
-                return;
-            }
-        }
-        if (_controller) {
-            [_controller hideProgress];
-            if (message) {
-                NSLog(@"message length-->%d", [message charLength]);
-                if ([message charLength] < 30) {
-                    [_controller showToast:message];
-                    return;
-                } else {
-                    [NativeUtil showAlertWithMessage:message];
-                }
-            } else {
-                [_controller showToast:@"发现未知错误，请重试"];
-            }
-            
-        } else {
-            if (message) {
-                [NativeUtil showAlertWithMessage:message];
-            } else {
-                [NativeUtil showAlertWithMessage:@"发现未知错误，请重试"];
-            }
-            
-        }
-    };
-    if (status == 0 || dict == nil) {
-        failed();
-        return;
-    }
-    
+    NSLog(@"result dict--->%@", responseData.description);
     if (status == 200) {
-        NSNumber *code = dict[@"status"][@"code"];
-        if (code.intValue == 0) {
-            NSDictionary *data = [dict objectForKey:@"data"];
-            if (data) {
-                if (_successed) _successed(data);
-            } else {
-                if (_successed) _successed(dict);
-            }
-            
-        } else {
-            failed();
-        }
+        [self operationSuccessed:responseData];
     } else {
-        failed();
+        [self operationFailed:responseData];
     }
 }
 
@@ -183,5 +125,71 @@
 {
     return [NSString stringWithFormat:@"%@/%@", HOST_NAME, path];
 }
+
+- (NSString *)getErrorMessage:(NSDictionary *)responseData
+{
+    return nil;
+}
+
+- (void)operationSuccessed:(NSDictionary *)responseData
+{
+    
+}
+
+- (void)operationFailed:(NSDictionary *)responseData
+{
+    if (_failed && _failed(responseData)) return;
+    NSString *message = [self getErrorMessage:responseData];
+    [self hideProgressAndShowErrorMsg:message];
+}
+
+- (void)hideProgressAndShowErrorMsg:(NSString *)message
+{
+    if (_controller) {
+        [_controller hideProgress];
+        if (message) {
+            NSLog(@"message length-->%d", [message charLength]);
+            if ([message charLength] < 30) {
+                [_controller showToast:message];
+                return;
+            } else {
+                [NativeUtil showAlertWithMessage:message];
+            }
+        } else {
+            [_controller showToast:@"发现未知错误，请重试"];
+        }
+    } else {
+        if (message) {
+            [NativeUtil showAlertWithMessage:message];
+        } else {
+            [NativeUtil showAlertWithMessage:@"发现未知错误，请重试"];
+        }
+    }
+}
+@end
+
+@implementation HttpEngine
+
+- (id)init
+{
+    self = [super init];
+    if (self) {
+        self.mkNetworkEngine = [[MKNetworkEngine alloc] initWithHostName:nil];
+//        self.errorDict = [NativeUtil dictionaryWithPlistFile:@"error_codes"];
+        //        NSLog(@"error dict-->%@", _errorDict.description);
+    }
+    return self;
+}
+
++ (HttpEngine *)sharedInstance
+{
+    static HttpEngine *httpEngine = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        httpEngine = [[HttpEngine alloc] init];
+    });
+    return httpEngine;
+}
+
 @end
 
