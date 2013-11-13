@@ -36,6 +36,30 @@ typedef BOOL (^ApiRequestFailedBlock)(NSDictionary *failedData);
                  params:(NSMutableDictionary *)params
              httpMethod:(NSString *)method
              controller:(YPBaseViewController *)controller;
+/*
+ 一行代码发起一个http请求
+ */
+
++ (void)startWithPath:(NSString *)path
+               params:(NSMutableDictionary *)params
+           httpMethod:(NSString *)method
+           controller:(YPBaseViewController *)controller
+            successed:(ApiRequestSuccessedBlock)successed;
+
++ (void)startWithPath:(NSString *)path
+               params:(NSMutableDictionary *)params
+           httpMethod:(NSString *)method
+           controller:(YPBaseViewController *)controller
+            successed:(ApiRequestSuccessedBlock)successed
+               failed:(ApiRequestFailedBlock)failed;
+
++ (void)startWithURLString:(NSString *)urlString
+                    params:(NSMutableDictionary *)params
+                httpMethod:(NSString *)method
+                controller:(YPBaseViewController *)controller
+                 successed:(ApiRequestSuccessedBlock)successed
+                    failed:(ApiRequestFailedBlock)failed;
+
 - (void)start;
 - (void)startUpload;
 - (void)setSuccessedHandler:(ApiRequestSuccessedBlock)successed
@@ -44,20 +68,21 @@ typedef BOOL (^ApiRequestFailedBlock)(NSDictionary *failedData);
 
 // 关闭进度框并且显示错误信息
 - (void)hideProgressAndShowErrorMsg:(NSString *)message;
+
 /*
  子类可重写
  */
 // 组装请求的URL
 + (NSString *)requestUrlWithPath:(NSString *)path;
 
-// 获取错误信息
-- (NSString *)getErrorMessage:(NSDictionary *)responseData;
-
 // 请求成功如何操作
 - (void)operationSuccessed:(NSDictionary *)responseData;
 
 // 请求失败如何操作
 - (void)operationFailed:(NSDictionary *)responseData;
+
+// 请求失败时，获取错误信息
+- (NSString *)getErrorMessage:(NSDictionary *)responseData;
 @end
 
 @interface HttpEngine : NSObject

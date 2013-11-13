@@ -73,14 +73,5 @@
      controller:(YPBaseViewController *)controller
         success:(void (^)(NSDictionary *data))sBlock
          failed:(BOOL (^)(NSDictionary *responseDict))fBlock;
-
-
-//
-//+ (void)startWithURLStr:(NSString *)urlString
-//                 params:(NSMutableDictionary *)params
-//                 method:(NSString *)method
-//             controller:(YPBaseViewController *)controller
-//              successed:(ApiRequestSuccessedBlock)successed
-//                 failed:(ApiRequestFailedBlock)failed;
 @end
 

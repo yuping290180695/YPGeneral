@@ -43,6 +43,51 @@
     return self;
 }
 
+
++ (void)startWithPath:(NSString *)path
+               params:(NSMutableDictionary *)params
+           httpMethod:(NSString *)method
+           controller:(YPBaseViewController *)controller
+            successed:(ApiRequestSuccessedBlock)successed
+{
+    [ApiRequest startWithPath:path
+                       params:params
+                   httpMethod:method
+                   controller:controller
+                    successed:successed
+                       failed:nil];
+}
+
++ (void)startWithPath:(NSString *)path
+               params:(NSMutableDictionary *)params
+           httpMethod:(NSString *)method
+           controller:(YPBaseViewController *)controller
+            successed:(ApiRequestSuccessedBlock)successed
+               failed:(ApiRequestFailedBlock)failed
+{
+    [ApiRequest startWithURLString:[ApiRequest requestUrlWithPath:path]
+                            params:params
+                        httpMethod:method
+                        controller:controller
+                         successed:successed
+                            failed:failed];
+}
+
++ (void)startWithURLString:(NSString *)urlString
+                    params:(NSMutableDictionary *)params
+                httpMethod:(NSString *)method
+                controller:(YPBaseViewController *)controller
+                 successed:(ApiRequestSuccessedBlock)successed
+                    failed:(ApiRequestFailedBlock)failed
+{
+    ApiRequest *request = [[ApiRequest alloc] initWithUrlString:urlString
+                                                         params:params
+                                                     httpMethod:method
+                                                     controller:controller];
+    [request setSuccessedHandler:successed failedHandler:failed];
+    [request start];
+}
+
 - (void)start
 {
     NSLog(@"url-->%@", self.urlString);
@@ -175,8 +220,6 @@
     self = [super init];
     if (self) {
         self.mkNetworkEngine = [[MKNetworkEngine alloc] initWithHostName:nil];
-//        self.errorDict = [NativeUtil dictionaryWithPlistFile:@"error_codes"];
-        //        NSLog(@"error dict-->%@", _errorDict.description);
     }
     return self;
 }

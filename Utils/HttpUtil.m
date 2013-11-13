@@ -102,10 +102,6 @@
     }
 }
 
-
-
-
-
 - (void)uploadFile:(NSString *)path
             params:(NSMutableDictionary *)params
         dataParams:(NSMutableDictionary *)data
