@@ -84,13 +84,23 @@
 }
 + (void)showAlertWithTitle:(NSString *)title
 {
-    [NativeUtil showAlertWithTitle:title okButtonTitle:@"关闭"];
+    [NativeUtil showAlertWithTitle:title message:nil];
 }
 
-+ (void)showAlertWithTitle:(NSString *)title okButtonTitle:(NSString *)okButtonTitle
++ (void)showAlertWithTitle:(NSString *)title message:(NSString *)message
 {
     [NativeUtil showAlertWithTitle:title
-                           message:nil
+                           message:message
+                        completion:nil
+                 cancelButtonTitle:nil
+                 otherButtonTitles:@"关闭", nil];
+}
+
+
++ (void)showAlertWithTitle:(NSString *)title message:(NSString *)message okButtonTitle:(NSString *)okButtonTitle
+{
+    [NativeUtil showAlertWithTitle:title
+                           message:message
                         completion:nil
                  cancelButtonTitle:nil
                  otherButtonTitles:okButtonTitle, nil];

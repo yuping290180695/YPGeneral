@@ -49,11 +49,12 @@
 
 // UiAlertView的扩展方法
 + (void)showAlertWithTitle:(NSString *)title;
-+ (void)showAlertWithMessage:(NSString *)message;
++ (void)showAlertWithTitle:(NSString *)title message:(NSString *)message;
++ (void)showAlertWithTitle:(NSString *)title message:(NSString *)message okButtonTitle:(NSString *)okButtonTitle;
 
++ (void)showAlertWithMessage:(NSString *)message;
 + (void)showAlertWithMessage:(NSString *)message
              okButtonClicked:(void (^)())okButtonClicked;
-
 + (void)showAlertWithMessage:(NSString *)message
                   completion:(void (^)(NSInteger buttonIndex))completion
            cancelButtonTitle:(NSString *)cancelButtonTitle
