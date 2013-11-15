@@ -107,15 +107,22 @@
     }];
     
     if (request.uploadFileDatas) {
-        [request.uploadFileDatas enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-//            [op addData:obj forKey:key];
-            [op addData:obj forKey:key mimeType:@"multipart/form-data" fileName:@"file.jpg"];
-        }];
+        for (UploadFile *file in request.uploadFileDatas) {
+            NSLog(@"key-->%@  data length-->%d fileName-->%@  type-->%@", file.key, file.data.length, file.fileName, file.mimeType);
+            [op addData:file.data
+                 forKey:file.key
+               mimeType:file.mimeType ? file.mimeType : @"application/octet-stream"
+               fileName:file.fileName ? file.fileName : @"file"];
+        }
     }
+    
     if (request.uploadFilePaths) {
-        [request.uploadFilePaths enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-            [op addFile:obj forKey:key mimeType:@"multipart/form-data"];
-        }];
+        for (UploadFile *file in request.uploadFileDatas) {
+            NSLog(@"key-->%@  path-->%@ type-->%@", file.key, file.filePath, file.mimeType);
+            [op addFile:file.filePath
+                 forKey:file.key
+               mimeType:file.mimeType ? file.mimeType : @"application/octet-stream"];
+        }
     }
     
     if (request.uploadProgressBlock) {
@@ -206,5 +213,43 @@
 @end
 
 @implementation ApiRequest
+- (id)initWithUrlString:(NSString *)urlString params:(NSMutableDictionary *)params method:(NSString *)method
+{
+    self = [super init];
+    if (self) {
+        self.urlString = urlString;
+        self.params = params;
+        self.method = method;
+    }
+    return self;
+}
+@end
 
+@implementation UploadFile
+- (id)initWithKey:(NSString *)key
+             data:(NSData *)data
+         mimeType:(NSString *)mimeType
+         fileName:(NSString *)fileName
+{
+    self = [super init];
+    if (self) {
+        self.key = key;
+        self.data = data;
+        self.mimeType = mimeType;
+        self.fileName = fileName;
+    }
+    return self;
+}
+- (id)initWithKey:(NSString *)key
+         filePath:(NSString *)filePath
+         mimeType:(NSString *)mimeType
+{
+    self = [super init];
+    if (self) {
+        self.key = key;
+        self.filePath = filePath;
+        self.mimeType = mimeType;
+    }
+    return self;
+}
 @end

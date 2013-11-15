@@ -79,9 +79,32 @@ typedef BOOL (^ApiRequestFailedBlock)(NSDictionary *failedData);
 @interface ApiRequest : NSObject
 @property (nonatomic, strong) NSString *urlString;
 @property (nonatomic, strong) NSMutableDictionary *params;
-@property (nonatomic, strong) NSMutableDictionary *uploadFilePaths;
-@property (nonatomic, strong) NSMutableDictionary *uploadFileDatas;
 @property (nonatomic, strong) NSString *method;
+@property (nonatomic, strong) NSArray *uploadFilePaths;
+@property (nonatomic, strong) NSArray *uploadFileDatas;
 @property (nonatomic, strong) MKNKProgressBlock uploadProgressBlock;
 @property (nonatomic, strong) MKNKProgressBlock downloadProgressBlock;
+
+- (id)initWithUrlString:(NSString *)urlString
+                 params:(NSMutableDictionary *)params
+                 method:(NSString *)method;
+@end
+/*
+ 封装文件上传参数
+ */
+@interface UploadFile : NSObject
+@property (nonatomic, strong) NSString *key;
+@property (nonatomic, strong) NSData *data;
+@property (nonatomic, strong) NSString *filePath;
+@property (nonatomic, strong) NSString *mimeType;
+@property (nonatomic, strong) NSString *fileName;
+
+- (id)initWithKey:(NSString *)key
+             data:(NSData *)data
+         mimeType:(NSString *)mimeType
+         fileName:(NSString *)fileName;
+
+- (id)initWithKey:(NSString *)key
+         filePath:(NSString *)filePath
+         mimeType:(NSString *)mimeType;
 @end
