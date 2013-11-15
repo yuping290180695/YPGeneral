@@ -38,7 +38,7 @@
 - (void)keyboardWillShowWithRect:(CGRect)keyboardRect;
 - (void)keyboardWillHideWithRect:(CGRect)keyboardRect;
 
-// 点击背景，关闭键盘，用与会弹出键盘的Controller
+// 点击背景，关闭键盘，用于会弹出键盘的View Controller
 - (void)addBackgroundButtonForHidingKeybord;
 
 // 定制导航按钮

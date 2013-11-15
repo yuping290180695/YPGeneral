@@ -84,6 +84,51 @@
     [engine enqueueOperation:op forceReload:YES];
 }
 
+- (void)startApiRequest:(ApiRequest *)request
+             controller:(YPBaseViewController *)controller
+              successed:(ApiRequestSuccessedBlock)successed
+                 failed:(ApiRequestFailedBlock)failed
+{
+    NSLog(@"HttpEngine url-->%@", request.urlString);
+    NSLog(@"HttpEngine method-->%@", request.method);
+    NSLog(@"HttpEngine params-->%@", request.params);
+    MKNetworkEngine *engine = [HttpEngine shared].mkNetworkEngine;
+    MKNetworkOperation *op = [engine operationWithURLString:request.urlString params:request.params httpMethod:request.method];
+    [op addCompletionHandler:^(MKNetworkOperation *completedOperation) {
+        [self processRequestOperation:completedOperation
+                           controller:controller
+                     successedHandler:successed
+                        failedHandler:failed];
+    } errorHandler:^(MKNetworkOperation *completedOperation, NSError *error) {
+        [self processRequestOperation:completedOperation
+                           controller:controller
+                     successedHandler:successed
+                        failedHandler:failed];
+    }];
+    
+    if (request.uploadFileDatas) {
+        [request.uploadFileDatas enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+//            [op addData:obj forKey:key];
+            [op addData:obj forKey:key mimeType:@"multipart/form-data" fileName:@"file.jpg"];
+        }];
+    }
+    if (request.uploadFilePaths) {
+        [request.uploadFilePaths enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+            [op addFile:obj forKey:key mimeType:@"multipart/form-data"];
+        }];
+    }
+    
+    if (request.uploadProgressBlock) {
+        [op onUploadProgressChanged:request.uploadProgressBlock];
+    }
+    if (request.downloadProgressBlock) {
+        [op onDownloadProgressChanged:request.downloadProgressBlock];
+    }
+    [engine enqueueOperation:op forceReload:YES];
+}
+
+
+
 - (void)processRequestOperation:(MKNetworkOperation *)operation
                      controller:(YPBaseViewController *)controller
                successedHandler:(ApiRequestSuccessedBlock)successed
@@ -153,9 +198,13 @@
         if (message) {
             [NativeUtil showAlertWithMessage:message];
         } else {
-            [NativeUtil showAlertWithMessage:@"发现未知错误，请重试"];
+            [NativeUtil showAlertWithTitle:@"发现未知错误，请重试"];
         }
     }
 }
+
+@end
+
+@implementation ApiRequest
 
 @end

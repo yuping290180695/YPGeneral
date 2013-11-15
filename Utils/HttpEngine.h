@@ -17,7 +17,7 @@
 typedef void (^ApiRequestSuccessedBlock)(NSDictionary *successedData);
 typedef BOOL (^ApiRequestFailedBlock)(NSDictionary *failedData);
 
-
+@class ApiRequest;
 @interface HttpEngine : NSObject
 @property (nonatomic, strong) MKNetworkEngine *mkNetworkEngine;
 + (HttpEngine *)shared;
@@ -41,6 +41,11 @@ typedef BOOL (^ApiRequestFailedBlock)(NSDictionary *failedData);
                 controller:(YPBaseViewController *)controller
                  successed:(ApiRequestSuccessedBlock)successed
                     failed:(ApiRequestFailedBlock)failed;
+
+- (void)startApiRequest:(ApiRequest *)request
+             controller:(YPBaseViewController *)controller
+              successed:(ApiRequestSuccessedBlock)successed
+                 failed:(ApiRequestFailedBlock)failed;
 
 
 // 显示提示信息
@@ -68,5 +73,15 @@ typedef BOOL (^ApiRequestFailedBlock)(NSDictionary *failedData);
           failedHandler:(ApiRequestFailedBlock)failed;
 
 @end
-
-
+/*
+ 封装请求参数，一般用于下载，上传等比较复杂的情况
+ */
+@interface ApiRequest : NSObject
+@property (nonatomic, strong) NSString *urlString;
+@property (nonatomic, strong) NSMutableDictionary *params;
+@property (nonatomic, strong) NSMutableDictionary *uploadFilePaths;
+@property (nonatomic, strong) NSMutableDictionary *uploadFileDatas;
+@property (nonatomic, strong) NSString *method;
+@property (nonatomic, strong) MKNKProgressBlock uploadProgressBlock;
+@property (nonatomic, strong) MKNKProgressBlock downloadProgressBlock;
+@end

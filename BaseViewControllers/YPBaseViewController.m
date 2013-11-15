@@ -145,20 +145,19 @@
 
 - (void)hudWasHidden:(MBProgressHUD *)hud
 {
-    if (_progressHUD == nil) {
-        return;
-    }
-    [_progressHUD removeFromSuperview];
-    self.progressHUD = nil;
-    NSLog(@"hide");
+    if (_progressHUD) {
+        [_progressHUD removeFromSuperview];
+        self.progressHUD = nil;
+        NSLog(@"hide progress");
+    }   
 }
 
 - (void)hideProgress
 {
-    if (_progressHUD == nil) {
-        return;
+    if (_progressHUD) {
+        [_progressHUD hide:YES];
     }
-    [_progressHUD hide:YES];
+    
 }
 - (void)pushViewControllerWithName:(NSString *)name
 {
@@ -254,4 +253,6 @@
 {
     [self.navigationController popViewControllerAnimated:YES];
 }
+
+
 @end
