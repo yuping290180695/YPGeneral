@@ -82,3 +82,13 @@
 }
 
 @end
+@implementation UILabel (UILabelEXT)
+
+- (void)resizeHeightWithText
+{
+    CGSize size = [NativeUtil sizeOfText:self.text width:self.width font:self.font];
+    NSLog(@"size-->%@", NSStringFromCGSize(size));
+    self.height = size.height;
+}
+
+@end

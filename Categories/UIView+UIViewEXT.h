@@ -27,3 +27,7 @@
 //- (void)setLocalizedTextWithKey:(NSString *)key;
 //- (void)setLocalizedPlaceholderWithKey:(NSString *)key;
 @end
+
+@interface UILabel (UILabelEXT)
+- (void)resizeHeightWithText;
+@end
