@@ -87,8 +87,9 @@
 - (void)resizeHeightWithText
 {
     CGSize size = [NativeUtil sizeOfText:self.text width:self.width font:self.font];
-    NSLog(@"size-->%@", NSStringFromCGSize(size));
-    self.height = size.height;
+    
+    self.height = ceil(size.height);
+    NSLog(@"frame-->%@", NSStringFromCGRect(self.frame));
 }
 
 @end
