@@ -37,4 +37,10 @@
     UIImage *image = [UIImage imageNamed:imageName];
     return [image stretchableImageWithLeftCapWidth:image.size.width / 2 topCapHeight:height];
 }
+
++ (UIImage *)resizableImage:(NSString *)imageName withInsets:(UIEdgeInsets )insets
+{
+    UIImage *image = [UIImage imageNamed:imageName];
+    return [image resizableImageWithCapInsets:insets];
+}
 @end

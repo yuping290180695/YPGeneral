@@ -14,4 +14,5 @@
 
 + (UIImage *)stretchableImage:(NSString *)imageName;
 + (UIImage *)stretchableImage:(NSString *)imageName height:(CGFloat)height;
++ (UIImage *)resizableImage:(NSString *)imageName withInsets:(UIEdgeInsets )insets;
 @end
