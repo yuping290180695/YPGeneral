@@ -165,7 +165,10 @@
     UIViewController *controller = [[class alloc] initWithNibName:name bundle:nil];
     [self.navigationController pushViewController:controller animated:YES];
 }
-
+- (void)setKeyboardNotificationEnabled:(BOOL)enabled
+{
+    _keyboardNotiEnabled = enabled;
+}
 - (void)registerKeyboardNotification
 {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];

@@ -35,6 +35,7 @@
 - (void)pushViewControllerWithName:(NSString *)name;
 
 // 键盘通知
+- (void)setKeyboardNotificationEnabled:(BOOL)enabled;
 - (void)keyboardWillShowWithRect:(CGRect)keyboardRect;
 - (void)keyboardWillHideWithRect:(CGRect)keyboardRect;
 
