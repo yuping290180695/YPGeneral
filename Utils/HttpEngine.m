@@ -149,6 +149,7 @@
     NSDictionary *responseData = [responseString objectFromJSONString];
     NSLog(@"request code--->%d", status);
     NSLog(@"result dict--->%@", responseData.description);
+    
     if (status == 200) {
         [self operationSuccessed:responseData
                             controller:controller
@@ -194,7 +195,6 @@
             NSLog(@"message length-->%d", [message charLength]);
             if ([message charLength] < 30) {
                 [controller showToast:message];
-                return;
             } else {
                 [NativeUtil showAlertWithMessage:message];
             }
