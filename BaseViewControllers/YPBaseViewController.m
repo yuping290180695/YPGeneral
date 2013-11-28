@@ -208,12 +208,12 @@
     [self keyboardWillHideWithRect:keyboardRect animationDuration:animationDuration];
 }
 
-- (void)keyboardWillShowWithRect:(CGRect)keyboardRect
+- (void)keyboardWillShowWithRect:(CGRect)keyboardRect animationDuration:(float)duration
 {
     
 }
 
-- (void)keyboardWillHideWithRect:(CGRect)keyboardRect
+- (void)keyboardWillHideWithRect:(CGRect)keyboardRect animationDuration:(float)duration
 {
     
 }
