@@ -36,8 +36,8 @@
 
 // 键盘通知
 - (void)setKeyboardNotificationEnabled:(BOOL)enabled;
-- (void)keyboardWillShowWithRect:(CGRect)keyboardRect;
-- (void)keyboardWillHideWithRect:(CGRect)keyboardRect;
+- (void)keyboardWillShowWithRect:(CGRect)keyboardRect animationDuration:(float)duration;
+- (void)keyboardWillHideWithRect:(CGRect)keyboardRect animationDuration:(float)duration;
 
 // 点击背景，关闭键盘，用于会弹出键盘的View Controller
 - (void)addBackgroundButtonForHidingKeybord;

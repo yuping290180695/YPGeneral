@@ -186,8 +186,12 @@
     NSDictionary *userInfo = [notification userInfo];
     NSValue* aValue = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
     CGRect keyboardRect = [aValue CGRectValue];
-    NSLog(@"show-->%@", NSStringFromCGRect([aValue CGRectValue]));
-    [self keyboardWillShowWithRect:keyboardRect];
+
+    NSValue *animationDurationValue = [userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey];
+    NSTimeInterval animationDuration;
+    [animationDurationValue getValue:&animationDuration];
+    NSLog(@"show-->%@  duration-->%f", NSStringFromCGRect([aValue CGRectValue]), animationDuration);
+    [self keyboardWillShowWithRect:keyboardRect animationDuration:animationDuration];
 }
 
 - (void)keyboardWillHide:(NSNotification *)notification
@@ -195,8 +199,13 @@
     NSDictionary *userInfo = [notification userInfo];
     NSValue* aValue = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
     CGRect keyboardRect = [aValue CGRectValue];
-    NSLog(@"hide-->%@", NSStringFromCGRect([aValue CGRectValue]));
-    [self keyboardWillHideWithRect:keyboardRect];
+    
+    NSValue *animationDurationValue = [userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey];
+    NSTimeInterval animationDuration;
+    [animationDurationValue getValue:&animationDuration];
+    
+    NSLog(@"hide-->%@  duration-->%f", NSStringFromCGRect([aValue CGRectValue]), animationDuration);
+    [self keyboardWillHideWithRect:keyboardRect animationDuration:animationDuration];
 }
 
 - (void)keyboardWillShowWithRect:(CGRect)keyboardRect
