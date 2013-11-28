@@ -230,6 +230,28 @@
     return [[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"] integerValue];
 }
 
++ (void)showToast:(NSString *)text
+{
+    [NativeUtil showToast:text inCenter:NO hideAfterDelay:1.5f];
+}
++ (void)showToast:(NSString *)text inCenter:(BOOL)inCenter hideAfterDelay:(NSTimeInterval)delay
+{
+	MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:[NativeUtil appDelegate].window animated:YES];
+	
+	// Configure for text only and offset down
+	hud.mode = MBProgressHUDModeText;
+	hud.labelText = text;
+	hud.margin = 10.f;
+    if (inCenter) {
+        hud.center = [NativeUtil appDelegate].window.center;
+    } else{
+        hud.yOffset = [NativeUtil appDelegate].window.frame.size.height * 0.2f;
+    }
+	
+	hud.removeFromSuperViewOnHide = YES;
+	hud.userInteractionEnabled = NO;
+	[hud hide:YES afterDelay:delay];
+}
 @end
 
 @implementation NSSet (NSSetEXT)

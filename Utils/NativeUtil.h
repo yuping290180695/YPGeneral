@@ -82,6 +82,9 @@
 
 + (NSString *)appVersionName;
 + (NSInteger)appVersionCode;
+
++ (void)showToast:(NSString *)text;
++ (void)showToast:(NSString *)text inCenter:(BOOL)inCenter hideAfterDelay:(NSTimeInterval)delay;
 @end
 
 @interface NSSet (NSSetEXT)
