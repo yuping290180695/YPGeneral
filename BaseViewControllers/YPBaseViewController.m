@@ -127,20 +127,6 @@
 	[hud hide:YES afterDelay:delay];
 }
 
-- (void)showToast:(NSString *)text hideAfterDelay:(NSTimeInterval)delay
-{
-    [self showToast:text onView:self.view.window inCenter:NO hideAfterDelay:delay];
-}
-
-- (void)showToast:(NSString *)text inCenter:(BOOL)inCenter
-{
-    [self showToast:text onView:self.view.window inCenter:inCenter hideAfterDelay:1.5f];
-}
-
-- (void)showToast:(NSString *)text
-{
-    [self showToast:text hideAfterDelay:1.5f];
-}
 
 
 - (void)hudWasHidden:(MBProgressHUD *)hud

@@ -22,12 +22,6 @@
 - (void)showProgressOnWindowWithText:(NSString *)text;
 - (void)showProgressOnView:(UIView *)view text:(NSString *)text userInteractionEnabled:(BOOL)enabled;
 
-// 显示Toast消息
-- (void)showToast:(NSString *)text onView:(UIView *)view inCenter:(BOOL)inCenter hideAfterDelay:(NSTimeInterval)delay;
-- (void)showToast:(NSString *)text hideAfterDelay:(NSTimeInterval)delay;
-- (void)showToast:(NSString *)text inCenter:(BOOL)inCenter;
-- (void)showToast:(NSString *)text;
-
 // 判断view是不是正在显示
 - (BOOL)isViewInBackground;
 

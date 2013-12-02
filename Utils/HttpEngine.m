@@ -194,12 +194,12 @@
         if (message) {
             NSLog(@"message length-->%d", [message charLength]);
             if ([message charLength] < 30) {
-                [controller showToast:message];
+                [NativeUtil showToast:message];
             } else {
                 [NativeUtil showAlertWithMessage:message];
             }
         } else {
-            [controller showToast:@"发现未知错误，请重试"];
+            [NativeUtil showToast:@"发现未知错误，请重试"];
         }
     } else {
         if (message) {

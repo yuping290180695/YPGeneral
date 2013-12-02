@@ -234,6 +234,12 @@
 {
     [NativeUtil showToast:text inCenter:NO hideAfterDelay:1.5f];
 }
+
++ (void)showToast:(NSString *)text inCenter:(BOOL)inCenter
+{
+    [NativeUtil showToast:text inCenter:inCenter hideAfterDelay:1.5f];
+}
+
 + (void)showToast:(NSString *)text inCenter:(BOOL)inCenter hideAfterDelay:(NSTimeInterval)delay
 {
 	MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:[NativeUtil appDelegate].window animated:YES];
